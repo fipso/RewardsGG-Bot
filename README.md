@@ -19,8 +19,11 @@ This tool needs python 3 to run
 ##Avaible Commands:
 While farming process is running you can use the following commands
 
- * `tickets` shows current ticket amout of every account
+ * `tickets` shows current ticket amount of every account
  * `fix` solves problems for new accounts
- * `spent <gameID> <amout> <account>` coming soon
+ * `spent <gameID> <amount> <account>`
+   * spents tickets on a giveaway of you choice 
+   * you can get the gameID using Google Chrome`s developer options
+   * just participate and look at the network tab
  * `debug` switches debug mode on/off
- * `exit` and `quit` Does someting
+ * `exit` and `quit` does someting
