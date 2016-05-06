@@ -126,6 +126,10 @@ for line in accountList:
     UserList.append(user)   
 
 folder = 'cookies/'
+
+if not os.path.exists(folder):
+    os.makedirs(folder)
+
 for the_file in os.listdir(folder):
     file_path = os.path.join(folder, the_file)
     try:
@@ -202,7 +206,7 @@ while 1 == 1:
                         print("[INFO] spent " + words[2] + " tickets on " + words[1])
 
         else:
-            print("[INFO] usage: spent <gameID> <amout> <account>")
+            print("[INFO] usage: spent <gameID> <amount> <account>")
 
     elif userInput == "fix":
         for user in UserList:
