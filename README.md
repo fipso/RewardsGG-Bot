@@ -21,9 +21,7 @@ While farming process is running you can use the following commands
 
  * `tickets` shows current ticket amount of every account
  * `fix` solves problems for new accounts
- * `spent <gameID> <amount> <account>`
-   * spents tickets on a giveaway of you choice 
-   * you can get the gameID using Google Chrome`s developer options
-   * just participate and look at the network tab
+ * `spent <itemURL> <amount> <account>`
+   * Example: `spent https://rewards.gg/giveaway/half-life-3 200 user100`
  * `debug` switches debug mode on/off
  * `exit` and `quit` does someting
