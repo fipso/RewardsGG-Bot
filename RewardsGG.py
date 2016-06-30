@@ -5,6 +5,7 @@ import time
 import random
 import threading
 import shutil
+import re
 from io import BytesIO
 
 UserList = []
@@ -112,8 +113,27 @@ def earnThread():
 
         ad += 1
         time.sleep(785)
-        
- 
+
+def getGameID(url):
+    buffer=BytesIO()
+    c= pycurl.Curl()
+    c.setopt(pycurl.URL,url)
+    c.setopt(pycurl.WRITEDATA,buffer)
+    c.setopt(pycurl.SSL_VERIFYPEER,0)
+    c.setopt(pycurl.SSL_VERIFYHOST,0)
+    c.setopt(pycurl.USERAGENT,"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36")
+    c.perform()
+    c.close()
+
+    body=buffer.getvalue()
+    text=body.decode("iso-8859-1")
+
+    pattern = 'data-gvid="(.+?)"'
+    gid = re.search(pattern,str(text))
+
+    return gid.group(1)
+
+
 print("[INFO] Starting...")
 
 with open("accounts.secure") as f:
@@ -123,7 +143,7 @@ for line in accountList:
     words = line.strip()
     words = words.split('|')
     user = BotUser(words[0],words[1])
-    UserList.append(user)   
+    UserList.append(user)
 
 folder = 'cookies/'
 
@@ -137,7 +157,7 @@ for the_file in os.listdir(folder):
             os.unlink(file_path)
     except Exception as e:
         print("[ERROR] " + e)
-         
+
 threading._start_new_thread(cookieThread, ())
 threading._start_new_thread(earnThread, ())
 
@@ -185,9 +205,10 @@ while 1 == 1:
                 while os.path.isfile("cookies/" + user.username + ".cookie") == False:
                     time.sleep(1)
                 if user.username == words[3]:
+                        gid = getGameID(words[1])
                         buffer = BytesIO()
                         c = pycurl.Curl()
-                        c.setopt(pycurl.URL, "https://rewards.gg/user/participate?preventCache=Sun%20May%2001%202016%2022:30:08%20GMT+0200%20(Mitteleurop%C3%A4ische%20Sommerzeit)&gid=" + words[1] + "&tickets=" + words[2])
+                        c.setopt(pycurl.URL, "https://rewards.gg/user/participate?preventCache=Sun%20May%2001%202016%2022:30:08%20GMT+0200%20(Mitteleurop%C3%A4ische%20Sommerzeit)&gid=" + gid + "&tickets=" + words[2])
                         c.setopt(pycurl.WRITEDATA, buffer)
                         c.setopt(pycurl.SSL_VERIFYPEER, 0)
                         c.setopt(pycurl.SSL_VERIFYHOST, 0)
@@ -202,11 +223,12 @@ while 1 == 1:
 
                         if debug:
                             print("[DEBUG]:\n" + text)
+                            print("[DEBUG]: Game ID: " + gid)
 
-                        print("[INFO] spent " + words[2] + " tickets on " + words[1])
+                        print("[INFO] spent " + words[2] + " tickets on ID: " + gid)
 
         else:
-            print("[INFO] usage: spent <gameID> <amount> <account>")
+            print("[INFO] usage: spent <itemURL> <amount> <account>")
 
     elif userInput == "fix":
         for user in UserList:
