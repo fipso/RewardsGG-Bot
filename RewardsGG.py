@@ -166,6 +166,7 @@ print("[INFO] Ready")
 while 1 == 1:
     userInput = input(">")
     if userInput == "tickets":
+        total = 0
         for user in UserList:
             while os.path.isfile("cookies/" + user.username + ".cookie") == False:
                 time.sleep(1)
@@ -187,8 +188,11 @@ while 1 == 1:
             tickets = find_between(text, 'class="tickets-count">' , '</')
             if tickets != "":
                 print ("[INFO] " + user.username + " has " + tickets + " tickets")
+                total = total + int(tickets)
             else:
                 print ("[ERROR] could not get tickets for " + user.username)
+
+        print("\n[INFO] Total avaible tickets: " + str(total))
 
     elif userInput == "debug":
         if debug:
